@@ -1,0 +1,600 @@
+/*
+ * Copyright 2026, OpenRemote Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+import { css, html, type PropertyValues, type TemplateResult, unsafeCSS } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import manager, { OREvent, DefaultColor3, OPENREMOTE_CLIENT_ID } from "@openremote/core";
+import "@openremote/or-components/or-panel";
+import "@openremote/or-translate";
+import type { Store } from "@reduxjs/toolkit";
+import { Page, type PageProvider } from "@openremote/or-app";
+import type { AppStateKeyed } from "@openremote/or-app";
+import { ClientRole, type Role } from "@openremote/model";
+import { i18next } from "@openremote/or-translate";
+import type { OrIcon } from "@openremote/or-icon";
+import type { OrVaadinTextField } from "@openremote/or-vaadin-components/or-vaadin-text-field";
+import { getConfirmDialogContent, showConfirmDialog } from "@openremote/or-vaadin-components/or-vaadin-confirm-dialog";
+
+const tableStyle = require("@material/data-table/dist/mdc.data-table.css");
+
+export function pageRolesProvider(store: Store<AppStateKeyed>): PageProvider<AppStateKeyed> {
+  return {
+    name: "roles",
+    routes: ["roles"],
+    pageCreator: () => {
+      return new PageRoles(store);
+    },
+  };
+}
+
+@customElement("page-roles")
+export class PageRoles extends Page<AppStateKeyed> {
+  static get styles() {
+    // language=CSS
+    return [
+      unsafeCSS(tableStyle),
+      css`
+        #wrapper {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          overflow: auto;
+        }
+
+        #title {
+          padding: 0 20px;
+          font-size: 18px;
+          font-weight: bold;
+          width: calc(100% - 40px);
+          max-width: 1360px;
+          margin: 20px auto;
+          align-items: center;
+          display: flex;
+          color: var(--or-app-color3, ${unsafeCSS(DefaultColor3)});
+        }
+
+        #title or-icon {
+          margin-right: 10px;
+          margin-left: 14px;
+        }
+
+        .panel {
+          width: calc(100% - 90px);
+          max-width: 1310px;
+          background-color: var(--or-app-color1, #ffffff);
+          border: 1px solid var(--or-app-color5, #d2d2d2);
+          border-radius: var(--dp-radius-panel, 10px);
+          box-shadow: var(--dp-shadow-low, 0 2px 8px rgba(0, 21, 100, 0.06));
+          position: relative;
+          margin: 0 auto;
+          padding: 12px 24px 24px;
+        }
+
+        .panel-title {
+          display: flex;
+          align-items: center;
+          text-transform: uppercase;
+          font-weight: bolder;
+          line-height: 1em;
+          color: var(--or-app-color3, ${unsafeCSS(DefaultColor3)});
+          margin-bottom: 10px;
+          margin-top: 0;
+          flex: 0 0 auto;
+          letter-spacing: 0.025em;
+          min-height: 36px;
+        }
+
+        .panel-title p {
+          margin: 0;
+        }
+
+        #table-roles,
+        #table-roles table {
+          width: 100%;
+          white-space: nowrap;
+        }
+
+        .mdc-data-table__row {
+          cursor: pointer;
+          border-top-color: var(--or-app-color5, #d2d2d2);
+        }
+
+        td,
+        th {
+          width: 25%;
+          border: none;
+        }
+
+        td.large,
+        th.large {
+          width: 50%;
+        }
+
+        .meta-item-container {
+          flex-direction: row;
+          overflow: hidden;
+          max-height: 0;
+          transition: max-height 0.25s ease-out;
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+
+        or-icon {
+          vertical-align: middle;
+          --or-icon-width: 20px;
+          --or-icon-height: 20px;
+          margin-right: 2px;
+          margin-left: -5px;
+        }
+
+        .row {
+          display: flex;
+          flex-direction: row;
+          margin: 10px 0;
+          flex: 1 1 0;
+          gap: 16px;
+        }
+
+        .column {
+          display: flex;
+          flex-direction: column;
+          margin: 0px;
+          flex: 1 1 0;
+        }
+
+        .column-title {
+          padding-bottom: 10px;
+        }
+
+        .mdc-data-table__header-cell {
+          font-weight: bold;
+          color: ${unsafeCSS(DefaultColor3)};
+        }
+
+        .mdc-data-table__header-cell:first-child {
+          padding-left: 36px;
+        }
+
+        .padded-cell {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+        }
+
+        .attribute-meta-row td {
+          padding: 0;
+        }
+
+        .attribute-meta-row {
+          max-width: 0px;
+        }
+
+        .attribute-meta-row.expanded .meta-item-container {
+          max-height: 1000px;
+          max-width: none;
+          transition: max-height 1s ease-in;
+        }
+
+        .button {
+          cursor: pointer;
+          display: flex;
+          flex-direction: row;
+          align-content: center;
+          padding: 16px;
+          align-items: center;
+          font-size: 14px;
+          text-transform: uppercase;
+          color: var(--or-app-color4);
+        }
+
+        .button or-icon {
+          --or-icon-fill: var(--or-app-color4);
+          margin-right: 5px;
+        }
+
+        @media screen and (max-width: 1024px) {
+          .row {
+            display: block;
+            flex-direction: column;
+          }
+        }
+
+        @media screen and (max-width: 768px) {
+          #title {
+            padding: 0;
+            width: 100%;
+          }
+          .panel {
+            border-left: 0px;
+            border-right: 0px;
+            width: calc(100% - 48px);
+            border-radius: 0;
+          }
+          .hide-mobile {
+            display: none;
+          }
+          td,
+          th {
+            width: 50%;
+          }
+        }
+      `,
+    ];
+  }
+
+  @state()
+  protected _compositeRoles: Role[] = [];
+
+  @state()
+  protected _roles: Role[] = [];
+
+  @state()
+  protected _rolesMapper = {};
+
+  @state()
+  protected _roleFilter: (roles: Role[]) => Role[] = (roles) => roles;
+
+  @state()
+  public realm?: string;
+
+  get name(): string {
+    return "role_plural";
+  }
+
+  protected _onRoleNameChanged(e: Event, role: Role): void {
+    const elem = e.currentTarget as OrVaadinTextField;
+    if (!elem.checkValidity()) {
+      elem.invalid = true;
+      elem.errorMessage = i18next.t("roleInvalid");
+      return;
+    }
+    const isDuplicate = this._compositeRoles.some((r) => r !== role && r.name === elem.value);
+    if (isDuplicate) {
+      elem.invalid = true;
+      elem.errorMessage = i18next.t("roleAlreadyExists");
+      return;
+    }
+    elem.invalid = false;
+    role.name = elem.value;
+    this.requestUpdate();
+  }
+
+  public shouldUpdate(_changedProperties: PropertyValues): boolean {
+    if (_changedProperties.has("realm")) {
+      this.getRoles();
+    }
+
+    return super.shouldUpdate(_changedProperties);
+  }
+
+  public connectedCallback() {
+    super.connectedCallback();
+    this.realm = this.getState().app.realm;
+  }
+
+  protected getState() {
+    return this._store.getState();
+  }
+
+  protected async getRoles() {
+    const roleResponse = await manager.rest.api.UserResource.getClientRoles(this.realm, OPENREMOTE_CLIENT_ID);
+    this._compositeRoles = [...roleResponse.data.filter((role) => role.composite)];
+    this._roles = [...roleResponse.data.filter((role) => !role.composite)];
+    this._roles.map((role) => {
+      this._rolesMapper[role.id] = role.name;
+    });
+  }
+
+  private async _updateRoles() {
+    if (this._compositeRoles.some((role) => role.compositeRoleIds.length === 0)) {
+      return;
+    }
+    const roles = [...this._compositeRoles, ...this._roles];
+    await manager.rest.api.UserResource.updateRoles(this.realm, roles);
+    this.getRoles();
+  }
+
+  private _deleteRole(role, rowIndex) {
+    showConfirmDialog(
+      this.shadowRoot,
+      html`
+        <or-vaadin-confirm-dialog @confirm=${() => this.doDelete(role, rowIndex)}>
+          ${getConfirmDialogContent(
+            "error",
+            "deleteRole",
+            html`<or-translate value="deleteRoleConfirm" .options=${{ roleName: role.name }}></or-translate>`,
+            "delete",
+            "cancel"
+          )}
+        </or-vaadin-confirm-dialog>
+      `
+    );
+  }
+
+  private doDelete(role, rowIndex) {
+    this.expanderToggle(rowIndex);
+    this._compositeRoles = [...this._compositeRoles.filter((u) => u.id !== role.id)];
+    this._updateRoles();
+  }
+
+  private addRemoveRole(ev: Event, r, index) {
+    if ((ev.currentTarget as HTMLInputElement).checked) {
+      this._compositeRoles[index].compositeRoleIds = [...this._compositeRoles[index].compositeRoleIds, r.id];
+    } else {
+      this._compositeRoles[index].compositeRoleIds = this._compositeRoles[index].compositeRoleIds.filter(
+        (id) => id !== r.id
+      );
+    }
+    this.requestUpdate("_compositeRoles");
+  }
+
+  private expanderToggle(index: number) {
+    const metaRow = this.shadowRoot.getElementById("attribute-meta-row-" + index);
+    const expanderIcon = this.shadowRoot.getElementById("mdc-data-table-icon-" + index) as OrIcon;
+    if (metaRow.classList.contains("expanded")) {
+      metaRow.classList.remove("expanded");
+      expanderIcon.icon = "chevron-right";
+    } else {
+      metaRow.classList.add("expanded");
+      expanderIcon.icon = "chevron-down";
+    }
+  }
+
+  protected render(): TemplateResult | void {
+    if (!manager.authenticated) {
+      return html` <or-translate value="notAuthenticated"></or-translate> `;
+    }
+
+    if (!manager.isKeycloak()) {
+      return html` <or-translate value="notSupported"></or-translate> `;
+    }
+
+    if (!this._roles || this._roles.length === 0) {
+      return html``;
+    }
+
+    const readonly = !manager.hasRole(ClientRole.WRITE_ADMIN);
+    const readRoles = this._roles
+      .filter((role) => role.name.includes("read"))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const writeRoles = this._roles
+      .filter((role) => role.name.includes("write"))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const otherRoles = this._roles
+      .filter((role) => !role.name.includes("read") && !role.name.includes("write"))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    return html`
+      <div id="wrapper">
+        <div id="title"><or-icon icon="account-box-multiple"></or-icon>${i18next.t("role_plural")}</div>
+        <div class="panel">
+          <div class="panel-title" style="justify-content: space-between;">
+            <p style="margin: 0;"><or-translate value="role"></or-translate></p>
+            <or-vaadin-text-field
+              placeholder=${i18next.t("search")}
+              style="width: 240px;"
+              @input=${(ev: InputEvent) => this.onRoleSearch(ev)}
+            >
+              <or-icon slot="suffix" value="magnify"></or-icon>
+            </or-vaadin-text-field>
+          </div>
+          <div id="table-roles" class="mdc-data-table">
+            <table class="mdc-data-table__table" aria-label="attribute list">
+              <thead>
+                <tr class="mdc-data-table__header-row">
+                  <th class="mdc-data-table__header-cell" role="columnheader" scope="col">
+                    <or-translate value="name"></or-translate>
+                  </th>
+                  <th class="mdc-data-table__header-cell" role="columnheader" scope="col">
+                    <or-translate value="description"></or-translate>
+                  </th>
+                  <th class="mdc-data-table__header-cell hide-mobile large" role="columnheader" scope="col">
+                    <or-translate value="permissions"></or-translate>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="mdc-data-table__content">
+                ${this._roleFilter(this._compositeRoles).map((role, index) => {
+                  const compositeRoleName = role.compositeRoleIds
+                    .map((id) => this._rolesMapper[id])
+                    .sort((a, b) => a.localeCompare(b))
+                    .join(", ");
+                  return html`
+                    <tr
+                      id="mdc-data-table-row-${index}"
+                      class="mdc-data-table__row"
+                      @click="${() => this.expanderToggle(index)}"
+                    >
+                      <td class="padded-cell mdc-data-table__cell">
+                        <or-icon id="mdc-data-table-icon-${index}" icon="chevron-right"></or-icon>
+                        <span>${role.name}</span>
+                      </td>
+                      <td class="padded-cell mdc-data-table__cell">${role.description}</td>
+                      <td class="padded-cell hide-mobile mdc-data-table__cell large">${compositeRoleName}</td>
+                    </tr>
+                    <tr id="attribute-meta-row-${index}" class="attribute-meta-row${!role.id ? " expanded " : " "}">
+                      <td colspan="100%">
+                        <div class="meta-item-container">
+                          <div class="row">
+                            <div class="column">
+                              <or-vaadin-text-field
+                                minlength="1"
+                                maxlength="255"
+                                required
+                                manual-validation
+                                value=${role.name}
+                                @change=${(ev: Event) => this._onRoleNameChanged(ev, role)}
+                              >
+                                <or-translate slot="label" value="role"></or-translate>
+                              </or-vaadin-text-field>
+                            </div>
+                            <div class="column">
+                              <or-vaadin-text-field
+                                minlength="1"
+                                maxlength="255"
+                                required
+                                value=${role.description}
+                                @change=${(ev: Event) => {
+                                  role.description = (ev.currentTarget as HTMLInputElement).value;
+                                  this.requestUpdate();
+                                }}
+                              >
+                                <or-translate slot="label" value="description"></or-translate>
+                              </or-vaadin-text-field>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="column">
+                              <strong class="column-title"
+                                ><or-translate value="readPermissions"></or-translate
+                              ></strong>
+                              ${readRoles.map(
+                                (r) => html`
+                                  <or-vaadin-checkbox
+                                    ?readonly=${readonly}
+                                    ?checked=${role.compositeRoleIds && role.compositeRoleIds.find((id) => id === r.id)}
+                                    @change=${(ev: Event) => this.addRemoveRole(ev, r, index)}
+                                  >
+                                    <label slot="label">${r.name.split(":")[1]}: ${r.description}</label>
+                                  </or-vaadin-checkbox>
+                                `
+                              )}
+                            </div>
+                            <div class="column">
+                              <strong class="column-title"
+                                ><or-translate value="writePermissions"></or-translate
+                              ></strong>
+                              ${writeRoles.map(
+                                (r) => html`
+                                  <or-vaadin-checkbox
+                                    ?readonly=${readonly}
+                                    ?checked=${role.compositeRoleIds && role.compositeRoleIds.find((id) => id === r.id)}
+                                    @change=${(ev: Event) => this.addRemoveRole(ev, r, index)}
+                                  >
+                                    <label slot="label">${r.name.split(":")[1]}: ${r.description}</label>
+                                  </or-vaadin-checkbox>
+                                `
+                              )}
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="column">
+                              ${otherRoles.map(
+                                (r) => html`
+                                  <or-vaadin-checkbox
+                                    ?readonly=${readonly}
+                                    ?checked=${role.compositeRoleIds && role.compositeRoleIds.find((id) => id === r.id)}
+                                    @change=${(ev: Event) => this.addRemoveRole(ev, r, index)}
+                                  >
+                                    <label slot="label">${r.name.split(":")[1]}: ${r.description}</label>
+                                  </or-vaadin-checkbox>
+                                `
+                              )}
+                            </div>
+                          </div>
+
+                          ${
+                            readonly
+                              ? html``
+                              : html`
+                                  <div class="row" style="justify-content: space-between; margin-bottom: 8px;">
+                                    ${
+                                      role.id
+                                        ? html`
+                                            <or-vaadin-button @click=${() => this._deleteRole(role, index)}>
+                                              <or-translate value="delete"></or-translate>
+                                            </or-vaadin-button>
+                                            <or-vaadin-button
+                                              theme="primary"
+                                              ?disabled=${!role.name || !role.description || this._compositeRoles.some((r) => r.compositeRoleIds.length === 0) || this._compositeRoles.some((r, i) => this._compositeRoles.some((o, j) => i !== j && r.name && r.name === o.name))}
+                                              @click=${() => this._updateRoles()}
+                                            >
+                                              <or-translate value="update"></or-translate>
+                                            </or-vaadin-button>
+                                          `
+                                        : html`
+                                            <or-vaadin-button
+                                              @click=${() => {
+                                                this._compositeRoles.splice(-1, 1);
+                                                this._compositeRoles = [...this._compositeRoles];
+                                              }}
+                                            >
+                                              <or-translate value="cancel"></or-translate>
+                                            </or-vaadin-button>
+                                            <or-vaadin-button
+                                              theme="primary"
+                                              ?disabled=${!role.name || !role.description || this._compositeRoles.some((r) => r.compositeRoleIds.length === 0) || this._compositeRoles.some((r, i) => this._compositeRoles.some((o, j) => i !== j && r.name && r.name === o.name))}
+                                              @click=${() => this._updateRoles()}
+                                            >
+                                              <or-translate value="create"></or-translate>
+                                            </or-vaadin-button>
+                                          `
+                                    }
+                                  </div>
+                                `
+                          }
+                        </div>
+                      </td>
+                    </tr>
+                  `;
+                })}
+                ${
+                  this._compositeRoles.length > 0 &&
+                  !!this._compositeRoles[this._compositeRoles.length - 1].id &&
+                  !readonly
+                    ? html`
+                        <tr class="mdc-data-table__row">
+                          <td colspan="100%">
+                            <a
+                              class="button"
+                              @click="${() => (this._compositeRoles = [...this._compositeRoles, { composite: true, name: "", compositeRoleIds: [] }])}"
+                            >
+                              <or-icon icon="plus"></or-icon>${i18next.t("add")} ${i18next.t("role")}</a
+                            >
+                          </td>
+                        </tr>
+                      `
+                    : ``
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  protected onRoleSearch(ev: InputEvent) {
+    const value = (ev.target as HTMLInputElement).value?.toLowerCase();
+    if (!value) {
+      this._roleFilter = (roles) => roles;
+    } else {
+      this._roleFilter = (roles) =>
+        roles.filter(
+          (r) =>
+            (r.name as string)?.toLowerCase().includes(value) ||
+            (r.description as string)?.toLowerCase().includes(value)
+        );
+    }
+  }
+
+  public stateChanged(state: AppStateKeyed) {
+    this.realm = state.app.realm;
+  }
+}

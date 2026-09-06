@@ -1,0 +1,74 @@
+/*
+ * Copyright 2017, OpenRemote Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+package org.openremote.container.security;
+
+import static org.openremote.model.Constants.RESTRICTED_USER_REALM_ROLE;
+
+import org.openremote.model.Constants;
+import org.openremote.model.security.User;
+import org.openremote.model.util.TextUtil;
+
+/**
+ * Services should use this interface to access a user's identity and perform authorization checks.
+ */
+public interface AuthContext {
+
+  String getAuthenticatedRealmName();
+
+  String getUsername();
+
+  String getUserId();
+
+  String getClientId();
+
+  /**
+   * @return <code>true</code> if the user is authenticated in the "master" realm and has the realm
+   *     role "admin".
+   */
+  default boolean isSuperUser() {
+    return Constants.MASTER_REALM.equals(getAuthenticatedRealmName())
+        && hasRealmRole(Constants.SUPER_USER_REALM_ROLE);
+  }
+
+  default boolean isRestrictedUser() {
+    return hasRealmRole(RESTRICTED_USER_REALM_ROLE);
+  }
+
+  default boolean isServiceAccount() {
+    String username = getUsername();
+    return username != null && username.startsWith(User.SERVICE_ACCOUNT_PREFIX);
+  }
+
+  boolean hasRealmRole(String role);
+
+  boolean hasResourceRole(String role, String resource);
+
+  default boolean hasResourceRoleOrIsSuperUser(String role, String resource) {
+    return hasResourceRole(role, resource) || isSuperUser();
+  }
+
+  /**
+   * @return <code>true</code> if the user is authenticated in the same realm or if the user is the
+   *     superuser (admin).
+   */
+  default boolean isRealmAccessibleByUser(String realm) {
+    return !TextUtil.isNullOrEmpty(realm)
+        && (isSuperUser() || realm.equals(getAuthenticatedRealmName()));
+  }
+}

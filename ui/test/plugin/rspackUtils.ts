@@ -1,0 +1,114 @@
+/*
+ * Copyright 2026, OpenRemote Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+import fs from "node:fs";
+import path from "node:path";
+
+import { getUserData } from "playwright/lib/transform/compilationCache";
+import { resolveHook } from "playwright/lib/transform/transform";
+
+import type { PlaywrightTestConfig as BasePlaywrightTestConfig } from "playwright/types/test";
+import type { FullConfig } from "playwright/types/testReporter";
+import type { Configuration as RspackConfig } from "@rspack/core";
+
+type CtConfig = BasePlaywrightTestConfig["use"] & {
+  ct?: boolean;
+  ctPort?: number;
+  ctTemplateDir?: string;
+  ctCacheDir?: string;
+  ctRspackConfig?: RspackConfig | (() => Promise<RspackConfig>);
+};
+
+/**
+ * Resolves the first project that contains a `project.use.ct`.
+ * @param config The full Playwright configuration
+ * @returns The projects' `UseOptions`
+ */
+export function resolveCtConfig(config: FullConfig): CtConfig | undefined {
+  return config.projects.find((project) => (project.use as CtConfig).ct)?.use;
+}
+
+export async function resolveDirs(configDir: string, use: CtConfig) {
+  const templateDir = await fs.promises
+    .realpath(use.ctTemplateDir || path.join(configDir, "playwright"))
+    .catch(() => undefined);
+  if (!templateDir) return null;
+
+  const outDir = use.ctCacheDir ? path.resolve(configDir, use.ctCacheDir) : path.resolve(templateDir, ".cache");
+
+  return {
+    configDir,
+    outDir,
+    templateDir,
+  };
+}
+
+export function resolveEndpoint(use: CtConfig) {
+  const baseURL = new URL(use.baseURL || "http://127.0.0.1");
+  return {
+    https: baseURL.protocol.startsWith("https:"),
+    host: baseURL.hostname,
+    port: use.ctPort || Number(baseURL.port) || 3100,
+  };
+}
+
+export type ImportInfo = {
+  id: string;
+  filename: string;
+  importSource: string;
+  remoteName: string | undefined;
+};
+
+export async function populateComponentsFromTests(
+  componentRegistry: Map<string, ImportInfo>,
+  componentsByImportingFile?: Map<string, string[]>
+) {
+  const importInfos: Map<string, ImportInfo[]> = await getUserData("playwright-ct-core");
+  for (const [file, importList] of importInfos) {
+    for (const importInfo of importList) {
+      componentRegistry.set(importInfo.id, importInfo);
+    }
+    if (componentsByImportingFile) {
+      componentsByImportingFile.set(
+        file,
+        importList.map((i) => resolveHook(i.filename, i.importSource)).filter(Boolean) as string[]
+      );
+    }
+  }
+}
+
+export function transformIndexFile(
+  content: string,
+  registerSource: string,
+  importInfos: Map<string, ImportInfo>
+): string {
+  const lines = [content, "", registerSource];
+
+  for (const value of importInfos.values()) {
+    const importPath = resolveHook(value.filename, value.importSource) || value.importSource;
+    lines.push(
+      `const ${value.id} = () => import('${importPath?.replaceAll(path.sep, "/")}').then(mod => mod.${
+        value.remoteName || "default"
+      });`
+    );
+  }
+
+  lines.push(`__pwRegistry.initialize({ ${[...importInfos.keys()].join(",\n  ")} });`);
+
+  return lines.join("\n");
+}

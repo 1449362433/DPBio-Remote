@@ -1,0 +1,86 @@
+/*
+ * Copyright 2021, OpenRemote Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+package org.openremote.model.security;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import java.util.Objects;
+import org.hibernate.annotations.Subselect;
+
+@Entity
+@Subselect(
+    "select * from PUBLIC.USER_ATTRIBUTE") // Map this immutable to an SQL view, don't use/create
+// table
+public class UserAttribute {
+
+  @Id protected String id;
+
+  @Column(name = "name")
+  protected String name;
+
+  @Column(name = "value")
+  protected String value;
+
+  protected UserAttribute() {}
+
+  @JsonCreator
+  public UserAttribute(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    UserAttribute that = (UserAttribute) o;
+    return Objects.equals(id, that.id)
+        && Objects.equals(name, that.name)
+        && Objects.equals(value, that.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, value);
+  }
+
+  @Override
+  public String toString() {
+    return "UserAttribute{"
+        + "id='"
+        + id
+        + '\''
+        + ", name='"
+        + name
+        + '\''
+        + ", value='"
+        + value
+        + '\''
+        + '}';
+  }
+}

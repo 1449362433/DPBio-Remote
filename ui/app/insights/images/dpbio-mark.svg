@@ -1,0 +1,12 @@
+<!-- Original mark paths extracted from page 8 of the DPBIO identity manual. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-9 -5 81.012 82.39" role="img" aria-label="达普生物">
+  <style>
+    .primary { fill: #0215c1; }
+    .accent { fill: #0395ff; }
+    @media (prefers-color-scheme: dark) { .primary, .accent { fill: #fff; } }
+  </style>
+  <g transform="translate(-360 338.483) scale(1 -1)">
+    <path class="primary" transform="translate(390.3924 316.1614)" d="M0 0V-50.068L-13.044-42.54-28.161-33.823C-29.542-33.027-30.392-31.555-30.392-29.961V-20.123C-30.392-18.53-29.543-17.058-28.164-16.262L-13.044-7.532Z"/>
+    <path class="accent" transform="translate(423.0115 318.3667)" d="M0 0V-9.919C0-11.511-.85-12.983-2.229-13.779L-17.346-22.509H-17.348L-30.39-30.041V20.116L-17.348 12.591-2.229 3.861C-.85 3.064 0 1.593 0 0Z"/>
+  </g>
+</svg>

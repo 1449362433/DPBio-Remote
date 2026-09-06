@@ -1,0 +1,47 @@
+{
+  "name": "@openremote/test",
+  "version": "1.28.0-snapshot",
+  "description": "Test Util",
+  "author": "OpenRemote",
+  "module": "index.js",
+  "private": true,
+  "exports": {
+    ".": "./index.ts",
+    "./data": "./fixtures/data.ts",
+    "./app.config": "./app.config.cts",
+    "./component.config": "./component.config.ts"
+  },
+  "files": [
+    "./playwright/index.html",
+    "./playwright/index.js"
+  ],
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./*"
+      ]
+    }
+  },
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@openremote/core": "workspace:*",
+    "@openremote/model": "workspace:*",
+    "@openremote/or-icon": "workspace:*",
+    "@openremote/util": "workspace:*",
+    "@playwright/experimental-ct-core": "1.59.1",
+    "@playwright/test": "1.59.1",
+    "@rspack/cli": "~2.1.10",
+    "@rspack/core": "~2.1.10",
+    "@rspack/dev-server": "~2.1.0",
+    "@sand4rt/experimental-ct-web": "1.59.1",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.6",
+    "i18next": "^21.5.3",
+    "i18next-http-backend": "^4.0.0",
+    "playwright": "1.59.1",
+    "playwright-core": "1.59.1",
+    "ts-loader": "~9.5.2",
+    "typescript": "~5.9.3",
+    "webpack": "^5.108.3"
+  }
+}

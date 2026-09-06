@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo",
+    "outDir": "./build/lib",
+    "rootDir": "src"
+  },
+  "include": ["./src"]
+}

@@ -1,0 +1,54 @@
+{
+  "name": "@openremote/or-asset-viewer",
+  "version": "1.28.0-snapshot",
+  "description": "OpenRemote Asset Viewer",
+  "customElements": "build/custom-elements.json",
+  "main": "build/dist/umd/index.bundle.js",
+  "module": "build/lib/index.js",
+  "exports": {
+    ".": "./build/lib/index.js",
+    "./*": "./build/lib/*.js",
+    "./jsx": {
+      "types": "./build/custom-elements-jsx.d.ts"
+    }
+  },
+  "types": "build/lib/index.d.ts",
+  "files": [
+    "build/lib/**",
+    "build/dist/**",
+    "build/custom-elements.json",
+    "build/custom-elements-jsx.d.ts"
+  ],
+  "scripts": {
+    "build": "npx tsc -b",
+    "analyze": "npx cem analyze --config ../custom-elements-manifest.config.mjs",
+    "test": "npx tsc -b && npx playwright test",
+    "prepack": "npx rspack"
+  },
+  "author": "OpenRemote",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@material/data-table": "^9.0.0",
+    "@openremote/core": "workspace:*",
+    "@openremote/model": "workspace:*",
+    "@openremote/or-asset-tree": "workspace:*",
+    "@openremote/or-attribute-history": "workspace:*",
+    "@openremote/or-attribute-input": "workspace:*",
+    "@openremote/or-chart": "workspace:*",
+    "@openremote/or-components": "workspace:*",
+    "@openremote/or-element": "workspace:*",
+    "@openremote/or-icon": "workspace:*",
+    "@openremote/or-mwc-components": "workspace:*",
+    "@openremote/or-translate": "workspace:*",
+    "@openremote/or-vaadin-components": "workspace:*",
+    "i18next": "^21.5.3",
+    "lit": "^3.3.1"
+  },
+  "devDependencies": {
+    "@openremote/util": "workspace:*",
+    "axios": "1.18.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

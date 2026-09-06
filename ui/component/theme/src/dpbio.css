@@ -1,0 +1,229 @@
+/*
+ * DPBIO product theme.
+ *
+ * The palette follows the DPBIO visual identity manual. Product neutrals are
+ * derived from the brand navy so dense instrument data stays calm and legible.
+ */
+:root {
+  color-scheme: light;
+
+  /* DPBIO source palette */
+  --dp-brand-primary: #0215c1;
+  --dp-brand-primary-hover: #0032be;
+  --dp-brand-primary-active: #000064;
+  --dp-brand-accent: #0395ff;
+  --dp-brand-cyan: #00c8ff;
+  --dp-brand-navy: #000046;
+  --dp-action-primary: #0215c1;
+  --dp-action-contrast: #ffffff;
+
+  /* Product surfaces */
+  --dp-color-canvas: #f6f8fc;
+  --dp-color-surface: #ffffff;
+  --dp-color-surface-subtle: #f0f2f9;
+  --dp-color-surface-selected: #e1f2ff;
+  --dp-color-text-strong: #000046;
+  --dp-color-text: #4b4b4b;
+  --dp-color-text-secondary: #636a7a;
+  --dp-color-text-tertiary: #767c8c;
+  --dp-color-border: #d2d2d2;
+  --dp-color-border-subtle: #e3e7f0;
+  --dp-color-border-strong: #969696;
+
+  /* Operational state colors */
+  --dp-color-info: #0082ff;
+  --dp-color-success: #8cc800;
+  --dp-color-warning: #ffbe00;
+  --dp-color-error: #e60050;
+  --dp-color-on-bright-status: #000046;
+
+  /* Brand-derived data series, darkened where needed for chart contrast */
+  --dp-data-series-1: #0215c1;
+  --dp-data-series-2: #0082ff;
+  --dp-data-series-3: #007fa3;
+  --dp-data-series-4: #4b6c00;
+  --dp-data-series-5: #795700;
+  --dp-data-series-6: #e60050;
+  --dp-data-series-7: #4b4b4b;
+  --dp-data-series-8: #000064;
+
+  /* Shape, depth and motion */
+  --dp-radius-control: 8px;
+  --dp-radius-panel: 10px;
+  --dp-radius-overlay: 12px;
+  --dp-shadow-low: 0 2px 8px rgba(0, 21, 100, 0.06);
+  --dp-shadow-medium: 0 10px 28px rgba(0, 21, 100, 0.1);
+  --dp-shadow-header: 0 1px 0 rgba(0, 21, 100, 0.12);
+  --dp-focus-ring: 0 0 0 3px rgba(3, 149, 255, 0.28);
+  --dp-motion-fast: 120ms;
+  --dp-motion-standard: 180ms;
+  --dp-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* OpenRemote semantic colors */
+  --or-color-base: var(--dp-color-surface);
+  --or-color-base-5pct: var(--dp-color-canvas);
+  --or-color-contrast-5pct: rgba(0, 0, 70, 0.045);
+  --or-color-contrast-10pct: rgba(0, 0, 70, 0.08);
+  --or-color-contrast-20pct: rgba(0, 0, 70, 0.14);
+  --or-color-contrast-30pct: rgba(0, 0, 70, 0.22);
+  --or-color-contrast-40pct: rgba(0, 0, 70, 0.34);
+  --or-color-contrast-50pct: rgba(0, 0, 70, 0.48);
+  --or-color-contrast-60pct: rgba(0, 0, 70, 0.58);
+  --or-color-contrast-70pct: rgba(0, 0, 70, 0.68);
+  --or-color-contrast-80pct: rgba(0, 0, 70, 0.8);
+  --or-color-contrast-90pct: rgba(0, 0, 70, 0.9);
+  --or-color-contrast: var(--dp-brand-navy);
+
+  --or-color-text-primary: var(--dp-brand-primary);
+  --or-color-text-error: #c70045;
+  --or-color-text-warning: #795700;
+  --or-color-text-success: #4b6c00;
+  --or-color-text-heading: var(--dp-color-text-strong);
+  --or-color-text-body: var(--dp-color-text);
+  --or-color-text-secondary: var(--dp-color-text-secondary);
+  --or-color-text-tertiary: var(--dp-color-text-tertiary);
+  --or-color-text-disabled: rgba(75, 75, 75, 0.56);
+
+  --or-color-primary: var(--dp-brand-primary);
+  --or-color-primary-50pct: rgba(2, 21, 193, 0.76);
+  --or-color-primary-10pct: rgba(2, 21, 193, 0.1);
+  --or-color-primary-contrast: #ffffff;
+
+  --or-color-error: var(--dp-color-error);
+  --or-color-error-50pct: rgba(230, 0, 80, 0.5);
+  --or-color-error-10pct: rgba(230, 0, 80, 0.1);
+  --or-color-error-contrast: #ffffff;
+  --or-color-warning: var(--dp-color-warning);
+  --or-color-warning-10pct: rgba(255, 190, 0, 0.18);
+  --or-color-warning-contrast: var(--dp-color-on-bright-status);
+  --or-color-success: var(--dp-color-success);
+  --or-color-success-50pct: rgba(140, 200, 0, 0.5);
+  --or-color-success-10pct: rgba(140, 200, 0, 0.14);
+  --or-color-success-contrast: var(--dp-color-on-bright-status);
+
+  /* Vaadin/Lumo foundation */
+  --lumo-base-color: var(--or-color-base);
+  --lumo-primary-color: var(--or-color-primary);
+  --lumo-primary-color-50pct: var(--or-color-primary-50pct);
+  --lumo-primary-color-10pct: var(--or-color-primary-10pct);
+  --lumo-primary-text-color: var(--or-color-text-primary);
+  --lumo-primary-contrast-color: var(--or-color-primary-contrast);
+  --lumo-font-family:
+    "HarmonyOS Sans SC", "HarmonyOS Sans", "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+  --lumo-border-radius-s: 6px;
+  --lumo-border-radius-m: var(--dp-radius-control);
+  --lumo-border-radius-l: var(--dp-radius-overlay);
+  --lumo-box-shadow-xs: var(--dp-shadow-low);
+  --lumo-box-shadow-s: var(--dp-shadow-low);
+  --lumo-box-shadow-m: var(--dp-shadow-medium);
+  --lumo-box-shadow-l: var(--dp-shadow-medium);
+  --lumo-clickable-cursor: pointer;
+
+  /* Shared component defaults */
+  --or-chart-background-color: var(--dp-color-surface);
+  --or-chart-border-color: var(--dp-color-border-subtle);
+  --or-chart-text-color: var(--dp-color-text);
+  --or-map-marker-color: var(--dp-brand-primary-hover);
+  --or-map-marker-active-color: var(--dp-brand-accent);
+  --or-map-marker-icon-color: #ffffff;
+  --or-map-marker-icon-active-color: var(--dp-brand-navy);
+  --or-asset-tree-background-color: var(--dp-color-surface);
+  --or-asset-tree-selected-background-color: var(--dp-color-surface-selected);
+  --or-asset-tree-selected-color: var(--dp-action-primary);
+  --or-asset-viewer-background-color: var(--dp-color-canvas);
+  --or-asset-viewer-panel-color: var(--dp-color-surface);
+  --or-asset-viewer-title-text-color: var(--dp-color-text-strong);
+  --or-panel-background-color: var(--dp-color-surface);
+  --or-panel-border: 1px solid var(--dp-color-border-subtle);
+}
+
+:root[theme~="dark"] {
+  color-scheme: dark;
+  --dp-action-primary: #0395ff;
+  --dp-action-contrast: #000046;
+  --dp-data-series-1: #58b9ff;
+  --dp-data-series-2: #0395ff;
+  --dp-data-series-3: #00c8ff;
+  --dp-data-series-4: #b5e34a;
+  --dp-data-series-5: #ffd45c;
+  --dp-data-series-6: #ff7a9f;
+  --dp-data-series-7: #d2d2d2;
+  --dp-data-series-8: #e4ecff;
+
+  --dp-color-canvas: #000046;
+  --dp-color-surface: #000064;
+  --dp-color-surface-subtle: #07117a;
+  --dp-color-surface-selected: #08258a;
+  --dp-color-text-strong: #f8faff;
+  --dp-color-text: #f0f2f9;
+  --dp-color-text-secondary: #d2d2d2;
+  --dp-color-text-tertiary: #b6bbca;
+  --dp-color-border: rgba(255, 255, 255, 0.2);
+  --dp-color-border-subtle: rgba(255, 255, 255, 0.12);
+  --dp-color-border-strong: rgba(255, 255, 255, 0.32);
+
+  --or-color-base: var(--dp-color-surface);
+  --or-color-base-5pct: var(--dp-color-canvas);
+  --or-color-contrast-5pct: rgba(255, 255, 255, 0.06);
+  --or-color-contrast-10pct: rgba(255, 255, 255, 0.1);
+  --or-color-contrast-20pct: rgba(255, 255, 255, 0.18);
+  --or-color-contrast-30pct: rgba(255, 255, 255, 0.26);
+  --or-color-contrast-40pct: rgba(255, 255, 255, 0.36);
+  --or-color-contrast-50pct: rgba(255, 255, 255, 0.48);
+  --or-color-contrast-60pct: rgba(255, 255, 255, 0.6);
+  --or-color-contrast-70pct: rgba(255, 255, 255, 0.7);
+  --or-color-contrast-80pct: rgba(255, 255, 255, 0.82);
+  --or-color-contrast-90pct: rgba(255, 255, 255, 0.92);
+  --or-color-contrast: var(--dp-color-text-strong);
+
+  --or-color-primary: var(--dp-brand-accent);
+  --or-color-primary-50pct: rgba(3, 149, 255, 0.76);
+  --or-color-primary-10pct: rgba(3, 149, 255, 0.16);
+  --or-color-primary-contrast: var(--dp-brand-navy);
+  --or-color-text-primary: var(--dp-brand-accent);
+  --or-color-text-heading: var(--dp-color-text-strong);
+  --or-color-text-body: var(--dp-color-text);
+  --or-color-text-secondary: var(--dp-color-text-secondary);
+  --or-color-text-tertiary: var(--dp-color-text-tertiary);
+  --or-color-text-disabled: rgba(240, 242, 249, 0.44);
+  --or-color-text-error: #ff7a9f;
+  --or-color-text-warning: #ffd45c;
+  --or-color-text-success: #b5e34a;
+
+  --lumo-primary-color: var(--or-color-primary);
+  --lumo-primary-color-50pct: var(--or-color-primary-50pct);
+  --lumo-primary-color-10pct: var(--or-color-primary-10pct);
+  --lumo-primary-text-color: var(--or-color-text-primary);
+  --lumo-primary-contrast-color: var(--or-color-primary-contrast);
+
+  --dp-shadow-low: 0 2px 10px rgba(0, 0, 26, 0.34);
+  --dp-shadow-medium: 0 12px 32px rgba(0, 0, 26, 0.48);
+  --dp-shadow-header: 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+html,
+body {
+  background: var(--dp-color-canvas, #f6f8fc);
+  color: var(--dp-color-text, #4b4b4b);
+  font-family: var(--lumo-font-family);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(3, 149, 255, 0.24);
+  color: var(--dp-color-text-strong, #000046);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dp-motion-fast: 0ms;
+    --dp-motion-standard: 0ms;
+  }
+
+  :where(*, *::before, *::after) {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "realms": {
+    "default": {
+      "appTitle": "达普生物仪器数据平台",
+      "language": "cn",
+      "styles": ":host > * {--or-app-color1:#FFFFFF;--or-app-color2:#F6F8FC;--or-app-color3:#4B4B4B;--or-app-color4:#0215C1;--or-app-color5:#D2D2D2;--or-app-color6:#E60050;--or-app-color8:#FFFFFF;}",
+      "logo": "/images/dpbio-logo.svg",
+      "logoMobile": "/images/dpbio-mark.svg",
+      "favicon": "/images/dpbio-mark.svg"
+    },
+    "smartcity": {
+      "styles": ":host > * {--or-app-color1:#FFFFFF;--or-app-color2:#F6F8FC;--or-app-color3:#4B4B4B;--or-app-color4:#0215C1;--or-app-color5:#D2D2D2;--or-app-color6:#E60050;--or-app-color8:#FFFFFF;}",
+      "logo": "/images/dpbio-logo.svg",
+      "logoMobile": "/images/dpbio-mark.svg",
+      "favicon": "/images/dpbio-mark.svg"
+    },
+    "manufacturer": {
+      "styles": ":host > * {--or-app-color1:#FFFFFF;--or-app-color2:#F6F8FC;--or-app-color3:#4B4B4B;--or-app-color4:#0215C1;--or-app-color5:#D2D2D2;--or-app-color6:#E60050;--or-app-color8:#FFFFFF;}",
+      "logo": "/images/dpbio-logo.svg",
+      "logoMobile": "/images/dpbio-mark.svg",
+      "favicon": "/images/dpbio-mark.svg"
+    }
+  },
+  "pages": {
+    "map": {
+      "filters": [
+        {
+          "label": "二氧化碳浓度 > 100",
+          "realms": ["smartcity"],
+          "query": {
+            "types": ["EnvironmentSensorAsset"],
+            "attributes": {
+              "items": [
+                {
+                  "name": {
+                    "predicateType": "number",
+                    "value": "ozoneLevel"
+                  },
+                  "value": {
+                    "predicateType": "number",
+                    "value": 100,
+                    "operator": "GREATER_THAN"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "灌溉水流量 > 10",
+          "realms": ["manufacturer"],
+          "query": {
+            "types": ["IrrigationAsset"],
+            "attributes": {
+              "items": [
+                {
+                  "name": {
+                    "predicateType": "number",
+                    "value": "flowWater"
+                  },
+                  "value": {
+                    "predicateType": "number",
+                    "value": 10,
+                    "operator": "GREATER_THAN"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "assets": {
+      "viewer": {
+        "assetTypes": {
+          "SoilSensorAsset": {
+            "viewerStyles": {},
+            "panels": [
+              {
+                "type": "group",
+                "title": "underlyingAssets"
+              },
+              {
+                "type": "info",
+                "hideOnMobile": true,
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["notes"]
+                }
+              },
+              {
+                "type": "info",
+                "column": 1,
+                "title": "location",
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["location"],
+                  "itemConfig": {
+                    "location": {
+                      "label": ""
+                    }
+                  }
+                }
+              },
+              {
+                "type": "info",
+                "title": "传感器数据",
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["salinity", "soilTensionMeasured", "temperature"]
+                }
+              },
+              {
+                "type": "info",
+                "title": "运行设置",
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["soilTensionMin", "soilTensionMax"]
+                }
+              },
+              {
+                "type": "history",
+                "column": 1
+              },
+              {
+                "type": "linkedUsers",
+                "column": 1
+              }
+            ]
+          },
+          "HarvestRobotAsset": {
+            "viewerStyles": {},
+            "panels": [
+              {
+                "type": "group",
+                "title": "underlyingAssets"
+              },
+              {
+                "type": "info",
+                "hideOnMobile": true,
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["notes"]
+                }
+              },
+              {
+                "type": "info",
+                "column": 1,
+                "title": "location",
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["location"],
+                  "itemConfig": {
+                    "location": {
+                      "label": ""
+                    }
+                  }
+                }
+              },
+              {
+                "type": "info",
+                "title": "运行状态",
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["operationMode", "speed", "direction"]
+                }
+              },
+              {
+                "type": "info",
+                "column": 1,
+                "title": "运行设置",
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["vegetableType"]
+                }
+              },
+              {
+                "type": "info",
+                "title": "作业统计",
+                "properties": {
+                  "include": []
+                },
+                "attributes": {
+                  "include": ["harvestedSession", "harvestedTotal"]
+                }
+              },
+              {
+                "type": "history",
+                "column": 1
+              },
+              {
+                "type": "linkedUsers",
+                "column": 1
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

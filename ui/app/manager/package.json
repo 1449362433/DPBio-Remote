@@ -1,0 +1,74 @@
+{
+  "name": "@openremote/manager",
+  "version": "1.28.0-snapshot",
+  "description": "OpenRemote Manager",
+  "author": "OpenRemote",
+  "license": "AGPL-3.0-or-later",
+  "exports": {
+    ".": "./build/lib/index.js",
+    "./*": "./build/lib/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/lib/*"
+      ]
+    }
+  },
+  "files": [
+    "build/lib/**"
+  ],
+  "types": "build/lib/index.d.ts",
+  "scripts": {
+    "clean": "npx tsc -b --clean && npx shx rm -rf build",
+    "modelBuild": "npx orutil build",
+    "modelWatch": "npx orutil watch",
+    "doctor": "npx cross-env NODE_OPTIONS=--max_old_space_size=4096 RSDOCTOR=true rspack --mode production",
+    "build": "npx cross-env NODE_OPTIONS=--max_old_space_size=4096 rspack --mode production",
+    "build:experimental": "npx cross-env NODE_OPTIONS=--max_old_space_size=4096 rsbuild build",
+    "serve": "npx tsc -b --clean && npx shx rm -rf build && npx orutil build && npx cross-env NODE_OPTIONS=--max_old_space_size=4096 rspack serve --mode development",
+    "serve:experimental": "npx tsc -b --clean && npx shx rm -rf build && npx orutil build && npx cross-env NODE_OPTIONS=--max_old_space_size=4096 rsbuild dev",
+    "serveNoModelBuild": "npx tsc -b --clean && npx cross-env NODE_OPTIONS=--max_old_space_size=4096 rspack serve --mode development",
+    "serveNoModelBuild:experimental": "npx tsc -b --clean && npx cross-env NODE_OPTIONS=--max_old_space_size=4096 rsbuild dev",
+    "test": "npx playwright test",
+    "prepack": "npx tsc -b"
+  },
+  "dependencies": {
+    "@lit/task": "^1.0.3",
+    "@material/data-table": "^9.0.0",
+    "@openremote/core": "workspace:*",
+    "@openremote/model": "workspace:*",
+    "@openremote/or-app": "workspace:*",
+    "@openremote/or-asset-tree": "workspace:*",
+    "@openremote/or-asset-viewer": "workspace:*",
+    "@openremote/or-attribute-picker": "workspace:*",
+    "@openremote/or-components": "workspace:*",
+    "@openremote/or-dashboard-builder": "workspace:*",
+    "@openremote/or-element": "workspace:*",
+    "@openremote/or-icon": "workspace:*",
+    "@openremote/or-json-forms": "workspace:*",
+    "@openremote/or-log-viewer": "workspace:*",
+    "@openremote/or-map": "workspace:*",
+    "@openremote/or-mwc-components": "workspace:*",
+    "@openremote/or-rules": "workspace:*",
+    "@openremote/or-services": "workspace:*",
+    "@openremote/or-translate": "workspace:*",
+    "@openremote/or-vaadin-components": "workspace:*",
+    "@openremote/rest": "workspace:*",
+    "@openremote/theme": "workspace:*",
+    "@reduxjs/toolkit": "^2.12.0",
+    "lit": "^3.3.1",
+    "maplibre-gl": "~5.19.0",
+    "moment": "^2.29.4",
+    "reselect": "^4.1.8"
+  },
+  "devDependencies": {
+    "@openremote/util": "workspace:*",
+    "@rsbuild/core": "~1.7.5",
+    "@rsdoctor/rspack-plugin": "~1.5.13",
+    "@rspack/core": "~2.1.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

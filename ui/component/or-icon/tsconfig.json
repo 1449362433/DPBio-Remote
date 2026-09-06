@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo",
+    "outDir": "./build/lib",
+    "rootDir": "src",
+    "typeRoots": ["./@types"]
+  },
+  "include": ["./src", "./@types"],
+  "references": [{ "path": "../or-element" }, { "path": "../model" }]
+}

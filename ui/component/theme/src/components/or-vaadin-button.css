@@ -1,0 +1,58 @@
+/*
+ * Copyright 2025, OpenRemote Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+@import "@vaadin/vaadin-lumo-styles/components/button.css";
+
+@media dpbio_components_button {
+  :host {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition:
+      transform var(--dp-motion-fast, 120ms) var(--dp-ease-standard, ease),
+      box-shadow var(--dp-motion-fast, 120ms) var(--dp-ease-standard, ease),
+      filter var(--dp-motion-fast, 120ms) var(--dp-ease-standard, ease);
+  }
+
+  :host([theme~="primary"]:not([disabled])) {
+    box-shadow: 0 2px 6px rgba(2, 21, 193, 0.18);
+  }
+
+  :host([theme~="primary"]:not([disabled]):hover) {
+    filter: brightness(0.94);
+    box-shadow: 0 4px 10px rgba(2, 21, 193, 0.22);
+  }
+
+  :host(:not([disabled]):active) {
+    transform: scale(0.985);
+  }
+
+  :host([focus-ring]) {
+    outline: 2px solid var(--lumo-primary-color, #0215c1);
+    outline-offset: 2px;
+  }
+
+  :host([theme~="icon"]) {
+    border-radius: var(--dp-radius-control, 8px);
+  }
+}
+
+:root::before,
+:host::before {
+  --_lumo-vaadin-button-inject: 1;
+  --_lumo-vaadin-button-inject-modules: lumo_components_button, dpbio_components_button;
+}

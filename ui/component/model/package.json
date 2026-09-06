@@ -1,0 +1,29 @@
+{
+  "name": "@openremote/model",
+  "version": "1.28.0-snapshot",
+  "description": "OpenRemote 3.x Model Types",
+  "main": "build/dist/umd/index.bundle.js",
+  "module": "build/lib/index.js",
+  "exports": {
+    ".": "./build/lib/index.js",
+    "./*": "./build/lib/*.js"
+  },
+  "types": "build/lib/index.d.ts",
+  "files": [
+    "build/lib/**",
+    "build/dist/**"
+  ],
+  "scripts": {
+    "build": "npx tsc -b --force",
+    "test": "echo \"No tests\" && exit 0",
+    "prepack": "npx tsc -b && npx rspack"
+  },
+  "author": "OpenRemote",
+  "license": "AGPL-3.0-or-later",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@openremote/util": "workspace:*"
+  }
+}

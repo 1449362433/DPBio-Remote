@@ -1,0 +1,87 @@
+# Build and Release Folders
+bin-debug/
+bin-release/
+[Oo]bj/
+[Bb]in/
+[Bb]uild/
+[Oo]ut/
+[Tt]mp/
+
+# Other files and folders
+deployment/manager/fcm.json
+.settings/
+.gradle/
+.vagrant/
+.node/
+.classpath/
+.classpath
+.project/
+.project
+.vscode/
+.idea/
+.sts4-cache/
+.local/
+.DS_*
+apminsight-javaagent/
+console/iOS/DerivedData
+console/iOS/Pods
+manager/.factorypath/
+Pods/
+bower_components/
+node_modules/
+manager/src/main/resources/version.properties
+ui/app/shared/cache
+ui/app/shared/fonts
+.eslintcache
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Specific files and logs
+openremote.log
+dive.log
+yarn-error.log
+local.properties
+**/yarn.lock
+
+# File extensions
+*.air
+*.ipa
+*.apk
+*.dab
+*.sh
+*.iml
+*.ipr
+*.iws
+*~
+*.tar.gz
+/balena/manager-build/
+
+# Local development tools and generated exports
+/.dotnet-cli/
+/.dotnet-cli-home/
+/.tools/
+/outputs/
+
+# Unrelated game/mod files stored beside the project locally
+/gta5_mod_garage/
+/AddonSpawner-zh-CN.xml
+/ShadersGen9Conversion.xml
+
+# Local licensed map data (download separately for deployment)
+/deployment/map/mapdata.mbtiles
+
+# Locally generated UI sources and metadata
+/ui/component/model/src/model.ts
+/ui/component/model/src/typescript-generator-info.json
+/ui/component/rest/src/restclient.ts
+/ui/component/or-icon/custom-elements.json
+
+# Internal brand source material; distributable assets live under ui/ and deployment/
+/docx/达普品牌形象视觉识别手册_20250409_RGB.pdf
+/docx/logo.png
+

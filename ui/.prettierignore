@@ -1,0 +1,38 @@
+# Keep these patterns compatible with Gradle Ant patterns.
+# Do not use negation, root-anchored patterns, or gitignore escaping.
+
+# Dependencies
+**/node_modules/**
+
+# Build, test and cache output, all of which each package writes to its own build dir
+**/build/**
+
+# Generated files
+**/generated/**
+**/*.generated.*
+**/src/model.ts
+**/src/restclient.ts
+**/src/typescript-generator-info.json
+
+# Caches
+**/.gradle/**
+**/.yarn/**
+
+# IDE metadata
+**/bin/**
+**/.idea/**
+**/.settings/**
+**/.vscode/**
+
+# Minified and bundled files
+**/*.bundle.js
+**/*.min.js
+**/*.min.css
+**/*.zip
+**/fonts/**
+**/map/sprites/*.json
+
+# Lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock

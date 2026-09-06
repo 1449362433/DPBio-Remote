@@ -1,0 +1,146 @@
+/*
+ * Copyright 2017, OpenRemote Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+package org.openremote.manager.apps;
+
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.openremote.container.web.WebResource;
+import org.openremote.model.apps.AppResource;
+import org.openremote.model.apps.ConsoleAppConfig;
+import org.openremote.model.http.RequestParams;
+import org.openremote.model.util.ValueUtil;
+
+public class AppResourceImpl extends WebResource implements AppResource {
+
+  protected final ConsoleAppService consoleAppService;
+  protected Map<String, Object> consoleAppInfoMap;
+  protected Object consoleConfig;
+
+  public AppResourceImpl(ConsoleAppService consoleAppService) {
+    this.consoleAppService = consoleAppService;
+  }
+
+  @Override
+  public String[] getApps(RequestParams requestParams) {
+    try {
+      return consoleAppService.getInstalled();
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  @Override
+  public Map<String, Object> getAppInfos(RequestParams requestParams) {
+    Path consoleAppDocRoot = consoleAppService.getConsoleAppDocRoot();
+    if (consoleAppDocRoot == null || !Files.isDirectory(consoleAppDocRoot)) {
+      throw new WebApplicationException(
+          Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+              .entity(String.format("%s is not a directory", consoleAppDocRoot))
+              .type(MediaType.APPLICATION_JSON_TYPE)
+              .build());
+    }
+
+    if (consoleAppInfoMap == null) {
+      try {
+        consoleAppInfoMap =
+            Files.find(
+                    consoleAppDocRoot,
+                    2,
+                    (filePath, fileAttr) ->
+                        filePath.getFileName().toString().endsWith("info.json")
+                            && fileAttr.isRegularFile())
+                .collect(
+                    Collectors.toMap(
+                        dir -> dir.getName(dir.getNameCount() - 2).toString(),
+                        dir -> {
+                          try {
+                            return ValueUtil.JSON.readValue(dir.toFile(), Object.class);
+                          } catch (IOException e) {
+                            throw new WebApplicationException(e);
+                          }
+                        }));
+      } catch (IOException e) {
+        throw new WebApplicationException(e);
+      }
+    }
+
+    return consoleAppInfoMap;
+  }
+
+  @Override
+  public Object getConsoleConfig(RequestParams requestParams) {
+    Path consoleAppDocRoot = consoleAppService.getConsoleAppDocRoot();
+    if (consoleAppDocRoot == null || !Files.isDirectory(consoleAppDocRoot)) {
+      throw new WebApplicationException(
+          Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+              .entity(String.format("%s is not a directory", consoleAppDocRoot))
+              .type(MediaType.APPLICATION_JSON_TYPE)
+              .build());
+    }
+
+    if (!Files.exists(consoleAppDocRoot.resolve("console_config.json"))) {
+      throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
+    }
+
+    if (consoleConfig == null) {
+      try {
+        consoleConfig =
+            ValueUtil.JSON.readValue(
+                new File(consoleAppDocRoot.resolve("console_config.json").toString()),
+                Object.class);
+      } catch (IOException e) {
+        throw new WebApplicationException(e);
+      }
+    }
+    return consoleConfig;
+  }
+
+  @Deprecated
+  protected ConsoleAppConfig getAppConfig(String realm) {
+    try {
+      Path consoleAppDocRoot = consoleAppService.getConsoleAppDocRoot();
+      if (consoleAppDocRoot == null || !Files.isDirectory(consoleAppDocRoot)) {
+        return null;
+      }
+
+      return Files.list(consoleAppDocRoot)
+          .filter(dir -> dir.getFileName().toString().startsWith(realm))
+          .map(
+              dir -> {
+                try {
+                  return ValueUtil.JSON.readValue(dir.toFile(), ConsoleAppConfig.class);
+                } catch (IOException e) {
+                  throw new WebApplicationException(e);
+                }
+              })
+          .findFirst()
+          .orElseThrow(NotFoundException::new);
+    } catch (IOException e) {
+      throw new WebApplicationException(e);
+    }
+  }
+}

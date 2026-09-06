@@ -1,0 +1,39 @@
+/*
+ * Copyright 2026, OpenRemote Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+@import "@vaadin/vaadin-lumo-styles/components/dialog.css";
+
+@media lumo_components_dialog-overlay-internal {
+  :host::part(overlay) {
+    width: 100%;
+    border: 1px solid var(--dp-color-border-subtle, var(--lumo-contrast-10pct));
+    border-radius: var(--dp-radius-overlay, var(--lumo-border-radius-l));
+    box-shadow: var(--dp-shadow-medium, var(--lumo-box-shadow-m));
+  }
+  :host(:not([has-footer])) [part="content"] {
+    padding: 0 var(--lumo-space-l) var(--lumo-space-l) !important;
+  }
+}
+
+:root::before,
+:host::before {
+  --_lumo-vaadin-dialog-overlay-inject: 1;
+  --_lumo-vaadin-dialog-overlay-inject-modules:
+    lumo_mixins_overlay, lumo_mixins_resizable-overlay, lumo_components_dialog-overlay,
+    lumo_components_dialog-overlay-internal;
+}

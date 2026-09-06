@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo",
+    "outDir": "./build/lib",
+    "rootDir": "src"
+  },
+  "include": ["./src"],
+  "references": [
+    { "path": "../or-element" },
+    { "path": "../core" },
+    { "path": "../or-components" },
+    { "path": "../or-mwc-components" },
+    { "path": "../or-vaadin-components" },
+    { "path": "../or-translate" }
+  ]
+}
