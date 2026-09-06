@@ -2528,7 +2528,7 @@ __metadata:
     "@types/react": "npm:^18"
     "@typescript-eslint/eslint-plugin": "npm:8.40.0"
     "@typescript-eslint/parser": "npm:8.40.0"
-    "@wc-toolkit/cem-inheritance": "npm:~1.2.2"
+    "@wc-toolkit/cem-inheritance": "npm:~1.2.5"
     "@wc-toolkit/jsx-types": "npm:~1.5.3"
     "@wc-toolkit/storybook-helpers": "npm:^10.5.1"
     "@webcomponents/webcomponentsjs": "npm:^2.6.0"
@@ -4820,12 +4820,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wc-toolkit/cem-inheritance@npm:~1.2.2":
-  version: 1.2.2
-  resolution: "@wc-toolkit/cem-inheritance@npm:1.2.2"
+"@wc-toolkit/cem-inheritance@npm:~1.2.5":
+  version: 1.2.5
+  resolution: "@wc-toolkit/cem-inheritance@npm:1.2.5"
   dependencies:
+    "@wc-toolkit/cem-utilities": "npm:^1.2.0"
     "@wc-toolkit/jsdoc-tags": "npm:^1.1.0"
-  checksum: 10c0/3fbc66badd00a8606d21d4cdd93b49c93fe0de3a3a095182db0408426e0c2623760b41dee2c8f1694ae51355198e66bda95cf1234d8e5b3d857611851997ac3c
+  checksum: 10c0/09c1f4a741f12a111b5b460a655b9415f30a4cf6175678d7deb3c595b21f23706f089e5ba98b6972c74c3eddc5559d111e31d3f6b14075aa04a86ab7c387bad5
+  languageName: node
+  linkType: hard
+
+"@wc-toolkit/cem-utilities@npm:^1.2.0":
+  version: 1.6.0
+  resolution: "@wc-toolkit/cem-utilities@npm:1.6.0"
+  checksum: 10c0/9f709e27274a01b97fce85685337d7f754ad3affac91966054db841e8f6b90dcfaeb4b74a34ee2e1ea28047c4b70f492d2319a6e9e628957b7e230228bf010ce
   languageName: node
   linkType: hard
 
